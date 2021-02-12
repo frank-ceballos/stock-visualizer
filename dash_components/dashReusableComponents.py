@@ -33,11 +33,11 @@ def Card(children, **kwargs):
     return html.Section(
         children,
         style=_merge({
-            'padding': 10,
-            'margin': 5,
+            'padding': '0px',
+            'margin': '0px',
             'background': colors['foreground'],
             'font-color': 'white',
-            
+                        
             # Remove possibility to select the text for better UX
             'user-select': 'none',
             '-moz-user-select': 'none',
