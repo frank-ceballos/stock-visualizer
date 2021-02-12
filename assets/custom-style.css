@@ -62,24 +62,27 @@
     height: 100%;
 }
 
-
 /*******************DROP DOWNS ^^^^ ************************/
 /*behind the behind*/
 /*dropdownlist unhovered */
 .Dropdown .VirtualSelectGrid{
     background-color: rgb(24,35,47);
     color: white;
+    padding: 0px;
 }
 
 /*drop down list hover over color*/
 .Dropdown .VirtualizedSelectFocusedOption {
     background-color: rgb(29,174,102);
     color: white;
+    padding-top: 0px;
 }
 
 .Dropdown .Select--multi .Select-value {
     background-color: rgb(29,174,102);
     color: #fff;
+    padding: 0px;
+
 }
 
 
@@ -89,23 +92,18 @@
       transition: 0.3s;
       border-radius: 5px; /* 5px rounded corners */
       color: rgb(120,255,233);
-      border-color: rgb(68, 102, 136);
-      border-width: 1px;
+      border-color: rgb(24,35,47);
+      border-width: 0px;
       border-style: solid;
       font-family: Courier New, monospace;
       font-size: 16px;
-      margin: 1000px;
-      padding: 1000px;
+      margin: 0px;
+      padding: 0px;
 }
-/*0 4px 8px 0*/
-/*.cardCustom:hover {
-  box-shadow: 2px 2px 20px 0px rgba(120,255,233, 1);
-  margin-bottom: 50;
-}
-*/
-
 
 .rowDiv > * {
-    padding: 16px;
+    width: 100%;
+    height: 100%;
     margin: 0px;
+    padding: 10px;
 }
