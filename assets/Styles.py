@@ -11,8 +11,8 @@ styleDropdown =  {'background':colors['navBackground'],
                   'border-color': colors['bullish'], 
                   'color': 'white', 'margin': 0, 'padding': 0}
 
-style_card2 = {'margin-bottom': 30, 'margin-top': 30, 'margin-right': 0,
-              'margin-left': 0, 'overflow': 'inherit', 'height': 500}
+style_card2 = {'margin-bottom': 0, 'margin-top': 2, 'margin-right': 0,
+              'margin-left': 0, 'padding-left':0, 'overflow': 'inherit', 'height': 750}
 
 
 ticker_picker_card = {'margin-bottom': 1, 'margin-top': 2, 'margin-right': 2,

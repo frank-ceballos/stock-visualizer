@@ -46,11 +46,10 @@ from datetime import datetime as dt
 # For styles
 from assets.Styles import DashComponentStyles
 
-# Layout
-from layout.layout import navBar, topCardDiv, candle_chart
-
-# Import callbacks
-from layout.layout import updateCloseLineGraph
+# Imoprt app
+from app import app
+from layout import layout1
+from callbacks import *
 
 # For web hosting
 import gunicorn
@@ -60,18 +59,21 @@ import gunicorn
 #                              8. Make Web App                                #
 ###############################################################################
 
-# Define dash app
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-#app = dash.Dash(__name__)
-app.title = 'TRIFORCE ANALYTICS'
-
 # Edit layout
-app.layout = html.Div(children = [navBar, topCardDiv, candle_chart], id = 'maindiv')
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content')],
+    id = 'maindiv')
 
-# Use for deployment
-server = app.server
+@app.callback(Output('page-content', 'children'),
+              Input('url', 'pathname'))
+def display_page(pathname):
+    if pathname == '/apps/app1':
+         return layout1
+    else:
+         return layout1
+
 
 # Run app
 if __name__ == '__main__':
-    #app.run_server(debug=False)
     app.run_server(port=8090,host='0.0.0.0', debug = True)
