@@ -13,6 +13,9 @@ from datetime import date, timedelta
 
 from finance.tools import get_ticker_data
 
+# My Finace Tools
+from finance.tools import get_SMA, get_EMA
+
 ###############################################################################
 #                             1. Web App Styling                              #
 ###############################################################################
@@ -20,8 +23,9 @@ from finance.tools import get_ticker_data
 colors = DashComponentStyles().colors
 
 @app.callback(Output('Close-Line-Graph', 'figure'),
-              [Input('Ticker-Picker', 'value')])
-def updateCloseLineGraph(ticker):
+              [Input('Ticker-Picker', 'value'),
+              Input('MovAvg-Picker', 'value')])
+def updateCloseLineGraph(ticker, moving_averages):
     if ticker == None:
         ticker = 'GOOG'
 
@@ -45,6 +49,9 @@ def updateCloseLineGraph(ticker):
                                               bordercolor = colors['hoverBorder']),
                             )
 
+    # Add moving averages
+    close_data = data['Close']
+    ma_traces = get_moving_average(moving_averages, close_data)
 
     # Set Volume Chart Colors
     volumeColors = []
@@ -68,7 +75,7 @@ def updateCloseLineGraph(ticker):
                                             color = colors['text'])))
     
     # Set x-axis range
-    start_date = date.today() - timedelta(days=90)
+    start_date = date.today() - timedelta(days=360)
     end_date = date.today()
 
     # Get y-axis Candlesticks Chart
@@ -106,12 +113,81 @@ def updateCloseLineGraph(ticker):
     # Add to top subplot
     figure.append_trace(candlestick_trace, row = 1, col = 1)
     figure.append_trace(trace_volume, row = 5, col = 1)
+    
+    # Moving averages to subplots
+    for ma_trace in ma_traces:
+        if len(ma_traces) >= 1:
+            figure.add_trace(ma_trace, row = 1, col = 1)
 
     # Update figure layout
     figure.update_layout(layout, xaxis_rangeslider_visible=False)
     
     return figure
 
+
+def get_moving_average(moving_averages, close_data):
+    ma_traces = []
+
+    for MA in moving_averages:
+        
+         if MA == 'SMA50' :
+             # Get SMA
+             SMA50  = get_SMA(close_data, 50)
+             
+             # Get Trace
+             trace_dummy = go.Scatter(x = SMA50.index,
+                                      y = SMA50,
+                                      mode='lines',
+                                      name = MA,
+                                      line = dict(color='magenta', width = 1),
+                                      hoverlabel = dict(font = dict(family='Courier New, monospace', size=8, color = colors['text'])))
+             # append
+             ma_traces.append(trace_dummy)
+         
+         elif MA == 'SMA200' :
+             # Get SMA
+             SMA200 = get_SMA(close_data, 200)
+             
+             # Get Trace
+             trace_dummy = go.Scatter(x = SMA200.index,
+                                      y = SMA200,
+                                      mode='lines',
+                                      name = MA,
+                                      line = dict(color='royalblue', width = 1),
+                                      hoverlabel = dict(font = dict(family='Courier New, monospace', size=8, color = colors['text'])))
+             # append
+             ma_traces.append(trace_dummy)
+             
+         elif MA == 'EMA9' :
+             # Get EMA
+             EMA9 = get_EMA(close_data, 9)
+             
+             # Get Trace
+             trace_dummy = go.Scatter(x = EMA9.index,
+                                      y = EMA9,
+                                      mode='lines',
+                                      name = MA,
+                                      line = dict(color='blueviolet', dash='dash', width = 1),
+                                      hoverlabel = dict(font = dict(family='Courier New, monospace', size=8, color = colors['text'])))
+             # append
+             ma_traces.append(trace_dummy)
+             
+         elif MA == 'EMA20' :
+             # Get EMA
+             EMA20 = get_EMA(close_data, 20)
+             
+             # Get Trace
+             trace_dummy = go.Scatter(x = EMA20.index,
+                                      y = EMA20,
+                                      mode='lines',
+                                      name = MA,
+                                      line = dict(color='orange', dash='dash', width = 1),
+                                      hoverlabel = dict(font = dict(family='Courier New, monospace', size=8, color = colors['text'])))
+             # append
+             ma_traces.append(trace_dummy)
+
+    return ma_traces
+             
 
 
 def get_yrange(start_date, end_date, data, column_label):

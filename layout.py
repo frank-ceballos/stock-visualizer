@@ -90,6 +90,21 @@ TickerDropdown = html.Div(dcc.Dropdown(
     className = 'Dropdown')
 
 
+# Moving average dropdown
+movAvg = {'SMA50': 'SMA50', 'SMA200': 'SMA200', 'EMA9': 'EMA9', 'EMA20': 'EMA20'}
+
+movAvgOptions = [{'label': key, 'value': movAvg[key]} for key in movAvg]
+
+movAvgDropdown = html.Div(dcc.Dropdown(
+    id = 'MovAvg-Picker',
+    options = movAvgOptions,
+    multi = True,
+    value = ['EMA9', 'EMA20', 'SMA50', 'SMA200'],
+    placeholder = 'Select a moving average',
+    style = styleDropdown),
+    className = 'Dropdown')  
+
+
 ###############################################################################
 #                                Ticker Info                                  #
 ###############################################################################
@@ -107,7 +122,13 @@ dropdownRow1 = dbc.Row([
             style = {'padding':0, 'margin':0}
             )
 
-dropdownRows = [dropdownRow1]
+dropdownRow2 = dbc.Row([
+            dbc.Col(html.Div(movAvgDropdown), width = 12, 
+                    style = {'padding':0, 'margin':0})],
+            style = {'padding':0, 'margin':0}
+            )
+
+dropdownRows = [dropdownRow1, dropdownRow2]
 
 dropdownCard = dbc.Row([dbc.Col(drc.Card(html.Div(dropdownRows ,
                     className='rowDiv'), 
@@ -154,8 +175,8 @@ candlestickCard = drc.Card(
 ###############################################################################
 
 row1 = dbc.Row([
-                dbc.Col(html.Div(dropdownCard), width=1),
-                dbc.Col(candlestickCard, width=9),
+                dbc.Col(html.Div(dropdownCard), width=2),
+                dbc.Col(candlestickCard, width=8),
                 dbc.Col(infoCard, width=2)
                 ])
 

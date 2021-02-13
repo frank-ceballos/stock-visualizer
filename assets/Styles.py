@@ -10,7 +10,7 @@ colors = {'background': 'rgb(3,8,18)', 'text': 'rgb(255,255,255)',
 
 styleDropdown =  {'background':colors['navBackground'], 
                   'border-color': colors['bullish'], 
-                  'color': 'white', 'margin': 0, 'padding': 0}
+                  'color': 'white', 'margin': 1, 'padding': 1}
 
 style_card2 = {'margin-bottom': 2, 'margin-top': 2, 'margin-right': 0,
               'margin-left': 0, 'padding-left':0, 'overflow': 'inherit', 'height': 750}
