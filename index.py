@@ -51,9 +51,16 @@ from app import app
 from layout import layout1
 from callbacks import *
 
+# GEt finance tools
+from finance.tools import get_nasdaq_data
+
 # For web hosting
 import gunicorn
 
+###############################################################################
+#                              Grab NASDAQ DATA                               #
+###############################################################################
+get_nasdaq_data()
 
 ###############################################################################
 #                              8. Make Web App                                #

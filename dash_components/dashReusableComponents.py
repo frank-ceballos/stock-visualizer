@@ -34,7 +34,8 @@ def Card(children, **kwargs):
         children,
         style=_merge({
             'background': colors['foreground'],
-            'font-color': 'white',         
+            'font-color': 'white',
+         
             # Remove possibility to select the text for better UX
             'user-select': 'none',
             '-moz-user-select': 'none',
@@ -110,7 +111,7 @@ def DemoDescription(filename, strip=False):
             style={
                 'padding': '15px 30px 27px',
                 'margin': '45px auto 45px',
-                'width': '100%',
+                'width': '80%',
                 'max-width': '1024px',
                 'borderRadius': 5,
                 'border': 'thin lightgrey solid',

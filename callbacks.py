@@ -1,3 +1,4 @@
+import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
@@ -77,15 +78,15 @@ def updateCloseLineGraph(ticker):
     start_volume, end_volume = get_yrange(start_date, end_date, data, 'Volume')
 
     # Set layout
-    layout = go.Layout(paper_bgcolor = colors['foreground'],
-                        plot_bgcolor = colors['foreground'], font = dict(family='Courier New, monospace', size=14, color = colors['text']),
+    layout = go.Layout(paper_bgcolor = colors['graphBackgroud'],
+                        plot_bgcolor = colors['graphBackgroud'], font = dict(family='Courier New, monospace', size=14, color = colors['text']),
                         xaxis = dict(range = [start_date, end_date],
                                     showgrid=True,
                                     gridwidth=0.01, gridcolor=colors['gridlines'],
                                     showline=False, linewidth=1, linecolor=colors['text']),
-                        yaxis = dict(range = [start_price, end_price]),
-                        yaxis2 = dict(range = [start_volume, end_volume]),
-                        height = 650,
+                        yaxis = dict(range = [start_price, end_price], title='USD'),
+                        yaxis2 = dict(range = [start_volume, end_volume], title = 'Volume'),
+                        height = 750,
                         margin = {'l': 40, 'r': 40, 'b': 10, 't': 10, 'pad': 4},
                         legend = dict( orientation = 'h', x = 0, y = 1.1),
                         showlegend=True,
@@ -93,11 +94,18 @@ def updateCloseLineGraph(ticker):
                         )
 
     # Create two subplots 
-    figure = make_subplots(rows = 2 , cols = 1, shared_xaxes=True)
+    figure = make_subplots(rows = 5, cols = 1, shared_xaxes=True,
+    specs=[
+        [{'rowspan':4}],
+        [None],
+        [None],
+        [None],
+        [{}],
+    ])
     
     # Add to top subplot
-    figure.add_trace(candlestick_trace, row = 1, col = 1)
-    figure.add_trace(trace_volume, row = 2, col = 1)
+    figure.append_trace(candlestick_trace, row = 1, col = 1)
+    figure.append_trace(trace_volume, row = 5, col = 1)
 
     # Update figure layout
     figure.update_layout(layout, xaxis_rangeslider_visible=False)
@@ -129,3 +137,39 @@ def get_yrange(start_date, end_date, data, column_label):
     y_end = max_val + delta
 
     return y_start, y_end
+
+
+###############################################################################
+#                                Ticker info                                  #
+###############################################################################
+
+@app.callback(Output('Ticker-Info', 'children'),
+              [Input('Ticker-Picker', 'value')])
+def update_ticker_info(ticker):
+    # Read data
+    nasdaq_info = pd.read_csv('data/nasdaq_info.csv')
+    
+    # Filter by ticker value
+    nasdaq_info = nasdaq_info[nasdaq_info['symbol'] == ticker]
+
+    # Get data
+    name = nasdaq_info['name'].values[0]
+    country = nasdaq_info['country'].values[0]
+    ipo_year = nasdaq_info['ipoyear'].values[0]
+    sector = nasdaq_info['sector'].values[0]
+    industry = nasdaq_info['industry'].values[0]
+
+    # Get info
+    info = f"""
+    {name}
+
+    **Country**: {country}
+
+    **IPO Year**: {ipo_year}
+
+    **Sector**: {sector}
+
+    **Industry**: {industry}
+    """
+
+    return info

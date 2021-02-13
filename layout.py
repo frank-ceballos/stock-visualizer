@@ -3,6 +3,7 @@
 import sys
 import os
 sys.path.append(os.path.realpath('..'))
+import pandas as pd
 
 # For visualization
 import dash
@@ -31,7 +32,7 @@ styleDropdown = DashComponentStyles().styleDropdown
 # Card style
 style_card1 = DashComponentStyles().ticker_picker_card
 style_card2 = DashComponentStyles().style_card2
-
+style_info  = DashComponentStyles().style_info
 
 
 ###############################################################################
@@ -66,11 +67,15 @@ navBar = dbc.Navbar(
 ###############################################################################
 #                                3. Dropdowns                                 #
 ###############################################################################
+# Get Ticker symbols
+tickers = pd.read_csv('data/nasdaq_info.csv')['symbol']
 
-# Define Ticker Dropdown
+# Define market
+Market = {ticker: ticker for ticker in tickers}
+""" # Define Ticker Dropdown
 Market = {'AAPL': 'AAPL',
           'GOOG': 'GOOG',
-          'MSFT': 'MSFT'}
+          'MSFT': 'MSFT'} """
 
 MarketOptions = [{'label': key, 'value': Market[key]} for key in Market]
 
@@ -79,9 +84,17 @@ TickerDropdown = html.Div(dcc.Dropdown(
     options = MarketOptions,
     searchable = True,
     multi = False,
+    value = 'GOOG',
     style = styleDropdown,
     placeholder = 'Search markets...'),
     className = 'Dropdown')
+
+
+###############################################################################
+#                                Ticker Info                                  #
+###############################################################################
+
+info_markdown= dcc.Markdown(id = 'Ticker-Info', style = {'margin-left': 0})
 
 
 ###############################################################################
@@ -104,8 +117,29 @@ dropdownCard = dbc.Row([dbc.Col(drc.Card(html.Div(dropdownRows ,
 
 
 ###############################################################################
-#                            4. Graphs Layouts                                #
+#                            4. info Layouts                                #
 ###############################################################################
+info_row1 = dbc.Row([
+    dbc.Col(
+        html.Div(
+            info_markdown), 
+        width = 12, 
+        style = {'padding':0, 'margin':0})
+        ],
+    style = {'padding':0, 'margin':0})
+
+infoRows = [info_row1]
+
+infoCard = dbc.Row([dbc.Col(drc.Card(html.Div(infoRows ,
+                    className='rowDiv'), 
+                    style = style_info,
+                    className='cardCustom'), width=12),
+                       ])
+
+###############################################################################
+#                            4. graph Layouts                                #
+###############################################################################
+
 candlestickCard = drc.Card(
     html.Div(
             dcc.Graph(id = 'Close-Line-Graph'), 
@@ -115,19 +149,20 @@ candlestickCard = drc.Card(
 
 
 
-
-
 ###############################################################################
 #                                4. layouts                                   #
 ###############################################################################
 
 row1 = dbc.Row([
-                dbc.Col(html.Div(dropdownCard), width=2),
-                dbc.Col(candlestickCard, width=9)])
+                dbc.Col(html.Div(dropdownCard), width=1),
+                dbc.Col(candlestickCard, width=9),
+                dbc.Col(infoCard, width=2)
+                ])
+
+
 
 # Define layouts
 
 layout1 = html.Div([
-    navBar, row1,
-    dcc.Link('Go to App 1', href='/apps/app1')
+    navBar, row1    
     ])
