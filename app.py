@@ -39,4 +39,4 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = 'TRIFORCE ANALYTICS'
 
 # Use for deployment
-server = app.server
+application = app.server
